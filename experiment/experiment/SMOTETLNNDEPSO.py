@@ -14,7 +14,6 @@ def smote_tlnn_depso(Minority_data, Minority_label, Majority_data, Majority_labe
     improve_data = np.concatenate((data, Synthetic_samples), axis=0)
     improve_t = np.concatenate((t, Synthetic_label), axis=0)
 
-    # True layer nearest neighbor(TLNN) approach for error/noise detection
     TLNN = TLNN_Search(improve_data)
 
     Noises = []
@@ -30,7 +29,6 @@ def smote_tlnn_depso(Minority_data, Minority_label, Majority_data, Majority_labe
     Noises_data = improve_data[Noises, :]
     Noises_data_label = improve_t[Noises]
 
-    # hybrid DEPSO approach is applied to optimize the noisy borderline examples
     if len(Noises) != 0:
         result = hybrid_DE_PSO_adjustment(Noises_data, Noises_data_label, Non_data, Non_t, 20)
         if result is None:

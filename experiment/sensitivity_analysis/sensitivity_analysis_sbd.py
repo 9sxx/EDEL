@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
-# 数据设置
-n_values = [1, 2, 3, 4, 5]  # n的值
+n_values = [1, 2, 3, 4, 5]
 results_sbd = {
     'DT': {
         'AUC': [0.9030, 0.9896, 0.9911, 0.9918, 0.9923],
@@ -33,45 +32,36 @@ results_sbd = {
     },
 }
 
-# 不同指标的 marker 样式
 markers = {
-    'AUC': 'o',  # 圆形
-    'Accuracy': 's',  # 方形
-    'Recall': 'D',  # 菱形
-    'F1': 'v',  # 倒三角
-    'G-mean': '^'  # 上三角
+    'AUC': 'o',
+    'Accuracy': 's',
+    'Recall': 'D',
+    'F1': 'v',
+    'G-mean': '^'
 }
 
-# 设置图形样式
 plt.rcParams["font.family"] = "Times New Roman"
-plt.rcParams["font.size"] = 20  # 字体大小设置为20pt
+plt.rcParams["font.size"] = 20
 plt.rcParams['axes.linewidth'] = 1.5
 
-# 创建图形
 fig, axs = plt.subplots(2, 2, figsize=(14, 9))
 
-# 模型名称列表
 models = ['DT', 'RF', 'XGBoost', 'LightGBM']
 
-# 用于在后面创建全局图例
 handles = []
 labels = []
 
-# 绘制每个模型的图
 for i, model in enumerate(models):
     ax = axs[i // 2, i % 2]
 
-    # 绘制每个指标的图
     for metric, values in results_sbd[model].items():
         line, = ax.plot(n_values, values, label=metric, marker=markers[metric], markersize=8)
-        # 收集图例的句柄和标签，只需在第一个模型中收集一次
         if i == 0:
             handles.append(line)
             labels.append(metric)
 
     ax.set_title(f'SBD - {model}', fontsize=20)
 
-    # 设置不同的Y轴刻度
     if model == 'DT':
         ax.set_ylim(0.85, 1.01)
         ax.set_yticks([0.85, 0.9, 0.95, 1])
@@ -89,19 +79,15 @@ for i, model in enumerate(models):
     ax.set_xlabel('Number of Weak Classifiers (N)', fontsize=20)
     ax.set_ylabel('Performance Metric', fontsize=20)
 
-    # 移除右边和上边框线
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
     ax.grid(False)
 
-# 在图的底部显示一次全局图例
 fig.legend(handles, labels, loc='lower center', ncol=5, fontsize=20)
 
-# 调整子图之间的间距
 plt.subplots_adjust(hspace=0.4, wspace=0.3, bottom=0.16)
 
-# 保存图像
 plt.savefig('sensitivity_analysis_sbd.pdf', bbox_inches='tight')
 
 plt.show()

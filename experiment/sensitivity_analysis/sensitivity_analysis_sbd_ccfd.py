@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 
-# 数据设置
-n_values = [1, 2, 3, 4, 5]  # n的值
+n_values = [1, 2, 3, 4, 5]
 
-# Spambase 数据集的结果
 results_sbd = {
     'DT': {
         'AUC': [0.9030, 0.9896, 0.9911, 0.9918, 0.9923],
@@ -35,7 +33,6 @@ results_sbd = {
     },
 }
 
-# Credit Card Fraud 数据集的结果
 results_ccfd = {
     'DT': {
         'AUC': [0.8921, 0.9767, 0.9797, 0.9827, 0.9827],
@@ -67,37 +64,28 @@ results_ccfd = {
     },
 }
 
-# 不同指标的 marker 样式
 markers = {
-    'AUC': 'o',       # 圆形
-    'Accuracy': 's',  # 方形
-    'Recall': 'D',    # 菱形
-    'F1': 'v',        # 倒三角
-    'G-mean': '^'     # 上三角
+    'AUC': 'o',
+    'Accuracy': 's',
+    'Recall': 'D',
+    'F1': 'v',
+    'G-mean': '^'
 }
 
-import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams["font.size"] = 18
+plt.rcParams['axes.linewidth'] = 1.5
 
-# 设置图形样式
-plt.rcParams["font.family"] = "Times New Roman"  # 使用 Times New Roman 字体
-plt.rcParams["font.size"] = 18  # 字体大小设置为18pt
-plt.rcParams['axes.linewidth'] = 1.5  # 线条宽度增加
-
-# 创建图形，增加尺寸
 fig, axs = plt.subplots(4, 2, figsize=(14, 18))
 
-# 模型名称的列表
 models = ['DT', 'RF', 'XGBoost', 'LightGBM']
 
-# 绘制每个模型的图
 for i, model in enumerate(models):
-    # Spambase 数据集（上方四个子图）
-    ax_sbd = axs[i // 2, i % 2]  # 使用整除和取模运算排列前四个子图
+    ax_sbd = axs[i // 2, i % 2]
     for metric, values in results_sbd[model].items():
         ax_sbd.plot(n_values, values, label=metric, marker=markers[metric], linestyle='-', markersize=8)
     ax_sbd.set_title(f'SBD - {model}', fontsize=18)
 
-    # 设置不同的Y轴刻度
     if model == 'DT':
         ax_sbd.set_ylim(0.85, 1.01)
         ax_sbd.set_yticks([0.85, 0.9, 0.95, 1])
@@ -112,11 +100,10 @@ for i, model in enumerate(models):
         ax_sbd.set_yticks([0.9, 0.95, 1])
 
     ax_sbd.set_xticks(n_values)
-    if i // 2 == 1:  # 仅在底部图设置X轴标签
+    if i // 2 == 1:
         ax_sbd.set_xlabel('Number of Weak Classifiers (N)', fontsize=18)
     ax_sbd.set_ylabel('Metric', fontsize=18)
 
-    # 更改边框线为灰色
     ax_sbd.spines['left'].set_color('gray')
     ax_sbd.spines['left'].set_alpha(0.5)
     ax_sbd.spines['bottom'].set_color('gray')
@@ -125,13 +112,11 @@ for i, model in enumerate(models):
     ax_sbd.spines['right'].set_visible(False)
     ax_sbd.spines['top'].set_visible(False)
 
-    # Credit Card Fraud 数据集（下方四个子图）
-    ax_ccfd = axs[(i // 2) + 2, i % 2]  # 下方的子图从第2行开始
+    ax_ccfd = axs[(i // 2) + 2, i % 2]
     for metric, values in results_ccfd[model].items():
         ax_ccfd.plot(n_values, values, label=metric, marker=markers[metric], linestyle='--', markersize=8)
     ax_ccfd.set_title(f'CCFD - {model}', fontsize=18)
 
-    # 设置不同的Y轴刻度
     if model == 'DT':
         ax_ccfd.set_ylim(0.7, 1.02)
         ax_ccfd.set_yticks([0.7, 0.8, 0.9, 1])
@@ -146,11 +131,10 @@ for i, model in enumerate(models):
         ax_ccfd.set_yticks([0.3, 0.5, 0.7, 0.9, 1])
 
     ax_ccfd.set_xticks(n_values)
-    if (i // 2) + 2 == 3:  # 仅在底部图设置X轴标签
+    if (i // 2) + 2 == 3:
         ax_ccfd.set_xlabel('Number of Weak Classifiers (N)', fontsize=18)
     ax_ccfd.set_ylabel('Metric', fontsize=18)
 
-    # 更改边框线为灰色
     ax_ccfd.spines['left'].set_color('gray')
     ax_ccfd.spines['left'].set_alpha(0.5)
     ax_ccfd.spines['bottom'].set_color('gray')
@@ -159,14 +143,11 @@ for i, model in enumerate(models):
     ax_ccfd.spines['right'].set_visible(False)
     ax_ccfd.spines['top'].set_visible(False)
 
-# 在图的底部显示一次图例
 handles, labels = ax_sbd.get_legend_handles_labels()
 fig.legend(handles, labels, loc='lower center', ncol=5, fontsize=18)
 
-# 调整子图之间的间距
 plt.subplots_adjust(hspace=0.4, wspace=0.3, bottom=0.08)
 
-# 保存图像为PDF
 plt.savefig('sensitivity_analysis_sbd_ccfd.pdf', bbox_inches='tight')
 
 plt.show()

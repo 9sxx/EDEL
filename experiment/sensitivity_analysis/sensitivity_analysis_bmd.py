@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
-# 数据设置
-n_values = [1, 2, 3, 4, 5]  # n的值
+n_values = [1, 2, 3, 4, 5]
 results_bmd = {
     'DT': {
         'AUC': [0.7294, 0.9594, 0.9641, 0.9740, 0.9745],
@@ -33,46 +32,38 @@ results_bmd = {
     },
 }
 
-# 不同指标的 marker 样式
 markers = {
-    'AUC': 'o',       # 圆形
-    'Accuracy': 's',  # 方形
-    'Recall': 'D',    # 菱形
-    'F1': 'v',        # 倒三角
-    'G-mean': '^'     # 上三角
+    'AUC': 'o',
+    'Accuracy': 's',
+    'Recall': 'D',
+    'F1': 'v',
+    'G-mean': '^'
 }
 
-# 设置图形样式
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.size"] = 12
 plt.rcParams['axes.linewidth'] = 1.5
 
-# 创建图形
 fig, axs = plt.subplots(2, 2, figsize=(14, 10), sharex=True, sharey=True)
 
-# 绘制每个模型的图
 for i, (model, metrics) in enumerate(results_bmd.items()):
     ax = axs[i // 2, i % 2]
 
-    # 绘制五条线
     for metric, values in metrics.items():
         ax.plot(n_values, values, label=metric, marker=markers[metric], markersize=6)
 
     ax.set_title(model, fontsize=14)
-    ax.set_xlabel('Number of Weak Classifiers (n)', fontsize=12)
+    ax.set_xlabel('Number of Weak Classifiers (N)', fontsize=12)
     ax.set_ylabel('Performance Metric', fontsize=12)
-    ax.set_ylim(0.4, 1)  # 设置Y轴范围
-    ax.set_xticks(n_values)  # 设置X轴刻度为整数
+    ax.set_ylim(0.4, 1)
+    ax.set_xticks(n_values)
     ax.grid(False)
     ax.legend(loc='lower right', fontsize=10)
 
-    # 移除右边和上边框线
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
-# 调整布局
 plt.tight_layout()
-# 保存图像
 plt.savefig('bmd_performance_analysis.png', dpi=300, bbox_inches='tight')
 
 plt.show()

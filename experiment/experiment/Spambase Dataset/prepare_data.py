@@ -3,7 +3,6 @@ import re
 
 path_train = "../../dataset/Spambase Dataset/spambase.data"
 
-# 原数据列名，由于列名中存在特殊字符，在使用xgboost建模时可能会遇到报错，故替换列名
 columns = [
     'word_freq_make', 'word_freq_address', 'word_freq_all', 'word_freq_3d', 'word_freq_our',
     'word_freq_over', 'word_freq_remove', 'word_freq_internet', 'word_freq_order', 'word_freq_mail',
@@ -19,14 +18,10 @@ columns = [
     'capital_run_length_longest', 'capital_run_length_total', 'class'
 ]
 
-# 创建正则表达式对象来替换特殊字符
 regex = re.compile(r"[\[\]<]", re.IGNORECASE)
 
-# 清理列名
 cleaned_columns = [regex.sub("_", col) for col in columns]
 
-
-# 处理重复列名
 def make_unique(column_names):
     seen = set()
     new_names = []
@@ -41,23 +36,19 @@ def make_unique(column_names):
     return new_names
 
 
-# 更新列名为唯一
 columns = make_unique(cleaned_columns)
 
 data = pd.read_csv(path_train, names=columns)
 print(data)
 
-# 获取数据集的形状
 shape = data.shape
 num_samples = shape[0]
 num_features = shape[1]
 print(f"Number of samples: {num_samples}")
 print(f"Number of features: {num_features}")
 
-# 查看不平衡程度
 print(data['class'].value_counts())
 
-# 导出处理后的特征和标签
 data.to_csv("data.csv", index=False)
 
 print("Data processing successful!")
